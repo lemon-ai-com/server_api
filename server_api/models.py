@@ -148,6 +148,7 @@ class Application(BaseTableModel, table=True):
 
 
 class ApplicationCreate(pydantic.BaseModel):
+    account_id: uuid.UUID = sqlmodel.Field(foreign_key="account.id")
     id_in_store: str = sqlmodel.Field(
         default=None, description="Application id in store (Google Play or App Store)"
     )
@@ -256,6 +257,7 @@ class Event(BaseTableModel, TargetBase, table=True):
 
 class EventCreate(TargetBase):
     name: str = sqlmodel.Field(description="Event name")
+    application_id: uuid.UUID = pydantic.Field(foreign_key="application.id")
     appsflyer_event_name: typing.Optional[str] = sqlmodel.Field(
         default=None, description="AppsFlyer Event name (if tracker is AppsFlyer)"
     )
@@ -347,6 +349,7 @@ class Metric(BaseTableModel, TargetBase, table=True):
 
 class MetricCreate(TargetBase):
     name: str = sqlmodel.Field(default=None, description="Metric name")
+    application_id: uuid.UUID = sqlmodel.Field(foreign_key="application.id")
 
 
 class MetricUpdate(MetricCreate):

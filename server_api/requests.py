@@ -1,6 +1,6 @@
 import requests
-from config import SERVER_API_HOST, SERVER_API_PORT
-from models import (
+from .config import SERVER_API_HOST, SERVER_API_PORT
+from .models import (
     ApplicationRead,
     ApplicationUpdate,
     EventRead,

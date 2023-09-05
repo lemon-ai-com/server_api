@@ -97,6 +97,18 @@ def get_models_for_pipeline(pipeline_id: str) -> list[ModelRead]:
         f"{server_api_url}/model", params={"pipeline_id": pipeline_id}
     ).json()
     return [ModelRead(**x) for x in model_data]
+    
+def get_models_for_event(event_id: str) -> list[ModelRead]:
+    model_data = requests.get(
+        f"{server_api_url}/model", params={"event_id": event_id}
+    ).json()
+    return [ModelRead(**x) for x in model_data]
+
+def get_models_for_metric(metric_id: str) -> list[ModelRead]:
+    model_data = requests.get(
+        f"{server_api_url}/model", params={"metric_id": metric_id}
+    ).json()
+    return [ModelRead(**x) for x in model_data]
 
 def update_model(model_id: str, model_update: ModelUpdate) -> ModelRead:
     model_data = requests.put(

@@ -179,22 +179,23 @@ class ApplicationUpdate(ApplicationCreate):
 
 
 class ApplicationRead(pydantic.BaseModel):
-    id: uuid.UUID = sqlmodel.Field(description="Application internal id")
-    id_in_store: str = sqlmodel.Field(
+    id: uuid.UUID
+    account_id: uuid.UUID
+    id_in_store: str = pydantic.Field(
         description="Application id in store (Google Play or App Store)"
     )
-    name_in_store: typing.Optional[str] = sqlmodel.Field(
+    name_in_store: typing.Optional[str] = pydantic.Field(
         default=None, description="Application name in store (Google Play or App Store)"
     )
-    logo_url: typing.Optional[str] = sqlmodel.Field(
+    logo_url: typing.Optional[str] = pydantic.Field(
         default=None, description="Application logo url"
     )
-    tracker: MobileTrackerEnum = sqlmodel.Field(description="Application tracker")
-    appsflyer_pull_api_key: typing.Optional[str] = sqlmodel.Field(
+    tracker: MobileTrackerEnum = pydantic.Field(description="Application tracker")
+    appsflyer_pull_api_key: typing.Optional[str] = pydantic.Field(
         default=None,
         description="Application AppsFlyer pull api key (used if tracker is AppsFlyer)",
     )
-    appsflyer_dev_key: typing.Optional[str] = sqlmodel.Field(
+    appsflyer_dev_key: typing.Optional[str] = pydantic.Field(
         default=None,
         description="Application AppsFlyer dev key (used if tracker is AppsFlyer)",
     )
@@ -247,7 +248,7 @@ class Event(BaseTableModel, TargetBase, table=True):
     s2s_events_sender_last_start_dt: typing.Optional[datetime.datetime] = None
     s2s_events_sender_last_finish_dt: typing.Optional[datetime.datetime] = None
 
-    application_id: uuid.UUID = sqlmodel.Field(foreign_key="application.id")
+    application_id: uuid.UUID = pydantic.Field(foreign_key="application.id")
     application: Application = sqlmodel.Relationship(back_populates="events")
 
     models: list["Model"] = sqlmodel.Relationship(back_populates="event")
@@ -291,38 +292,38 @@ class EventUpdate(EventCreate):
 
 
 class EventRead(TargetBase):
-    id: uuid.UUID = sqlmodel.Field(description="Event internal id")
-    name: str = sqlmodel.Field(description="Event internal name")
-    appsflyer_event_name: typing.Optional[str] = sqlmodel.Field(
+    id: uuid.UUID = pydantic.Field(description="Event internal id")
+    name: str = pydantic.Field(description="Event internal name")
+    appsflyer_event_name: typing.Optional[str] = pydantic.Field(
         default=None, description="AppsFlyer Event name (if tracker is AppsFlyer)"
     )
-    adjust_event_id: typing.Optional[str] = sqlmodel.Field(
+    adjust_event_id: typing.Optional[str] = pydantic.Field(
         default=None, description="Adjust Event token (if tracker is Adjust)"
     )
-    application_id: uuid.UUID = sqlmodel.Field(
+    application_id: uuid.UUID = pydantic.Field(
         description="Internal application id present in account to send event for"
     )
-    do_filter_for_target_value: bool = sqlmodel.Field(
+    do_filter_for_target_value: bool = pydantic.Field(
         default=False,
         description="If true, filter event is sent only if satisfies target value filter",
     )
-    target_value_from: typing.Optional[int] = sqlmodel.Field(
+    target_value_from: typing.Optional[int] = pydantic.Field(
         default=None,
         description="If do_filter_for_target_value is true, filter event is sent only if "
         "target value is greater or equal to this value",
     )
-    target_value_to: typing.Optional[int] = sqlmodel.Field(
+    target_value_to: typing.Optional[int] = pydantic.Field(
         default=None,
         description="If do_filter_for_target_value is true, filter event is sent only if "
         "target value is less or equal to this value",
     )
-    time_limit_for_generation_hours: typing.Optional[int] = sqlmodel.Field(
+    time_limit_for_generation_hours: typing.Optional[int] = pydantic.Field(
         default=None, description="Time limit for event generation in hours"
     )
-    is_sending_active: bool = sqlmodel.Field(
+    is_sending_active: bool = pydantic.Field(
         default=False, description="If true, event is sent to the tracker"
     )
-    set_target_as_revenue: bool = sqlmodel.Field(
+    set_target_as_revenue: bool = pydantic.Field(
         default=False, description="If true, target is set as revenue"
     )
 
@@ -353,8 +354,9 @@ class MetricUpdate(MetricCreate):
 
 
 class MetricRead(TargetBase):
-    id: uuid.UUID = sqlmodel.Field(description="Metric internal id")
-    name: str = sqlmodel.Field(description="Metric internal name")
+    id: uuid.UUID = pydantic.Field(description="Metric internal id")
+    application_id: uuid.UUID
+    name: str = pydantic.Field(description="Metric internal name")
 
 
 class ModelOutputValueTypeEnum(str, Enum):

@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import find_packages, setup
 
 from server_api import __version__
 
@@ -8,6 +8,6 @@ setup(
     url="https://github.com/lemon-ai-com/server_api",
     author="Lemon AI",
     author_email="dev@lemon-ai.com",
-    py_modules=["server_api"],
+    packages=find_packages(exclude=['tests', 'tests.*']),
     install_requires=["requests==2.31.0", "pydantic==2.3.0"],
 )

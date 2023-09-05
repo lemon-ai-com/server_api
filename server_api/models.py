@@ -208,6 +208,12 @@ class ApplicationRead(pydantic.BaseModel):
     push_api_integration_check_last_start_dt: typing.Optional[datetime.datetime] = None
     push_api_integration_check_last_finish_dt: typing.Optional[datetime.datetime] = None
 
+    def is_ios(self) -> bool:
+        return "." not in self.id_in_store
+
+    def max_seconds_from_install_for_inference(self) -> int:
+        return 23 * 3600 if self.is_ios() else 3 * 24 * 3600
+
 
 class PresetTargetEnum(str, Enum):
     ltv = "ltv"

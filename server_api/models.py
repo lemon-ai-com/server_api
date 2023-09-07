@@ -148,24 +148,29 @@ class Application(BaseTableModel, table=True):
 
 
 class ApplicationCreate(pydantic.BaseModel):
-    id_in_store: str = sqlmodel.Field(
+    id_in_store: str = pydantic.Field(
         default=None, description="Application id in store (Google Play or App Store)"
     )
-    tracker: MobileTrackerEnum = sqlmodel.Field(
+    tracker: MobileTrackerEnum = pydantic.Field(
         default=None, description="Application tracker"
     )
-    appsflyer_pull_api_key: typing.Optional[str] = sqlmodel.Field(
+    appsflyer_pull_api_key: typing.Optional[str] = pydantic.Field(
         default=None,
         description="Application AppsFlyer pull api key (used if tracker is AppsFlyer)",
     )
-    appsflyer_dev_key: typing.Optional[str] = sqlmodel.Field(
+    appsflyer_dev_key: typing.Optional[str] = pydantic.Field(
         default=None,
         description="Application AppsFlyer dev key (used if tracker is AppsFlyer)",
     )
-    adjust_app_token: typing.Optional[str] = sqlmodel.Field(
+    adjust_app_token: typing.Optional[str] = pydantic.Field(
         default=None,
         description="Application Adjust app token (used if tracker is Adjust)",
     )
+    convertion_event_names: list[str] = pydantic.Field(
+        default=[],
+        description="Application convertion event names",
+    )
+
 
 
 class ApplicationUpdate(ApplicationCreate):
@@ -198,6 +203,10 @@ class ApplicationRead(pydantic.BaseModel):
     appsflyer_dev_key: typing.Optional[str] = pydantic.Field(
         default=None,
         description="Application AppsFlyer dev key (used if tracker is AppsFlyer)",
+    )
+    convertion_event_names: list[str] = pydantic.Field(
+        default=[],
+        description="Application convertion event names",
     )
     pull_api_collector_success: typing.Optional[bool] = None
     pull_api_collector_last_start_dt: typing.Optional[datetime.datetime] = None

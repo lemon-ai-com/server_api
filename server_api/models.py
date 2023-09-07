@@ -4,8 +4,9 @@ import uuid
 from enum import Enum
 
 import pydantic
+from sqlalchemy import String
 import sqlmodel
-
+from sqlmodel import ARRAY
 
 class BaseTableModel(sqlmodel.SQLModel):
     id: uuid.UUID = sqlmodel.Field(default_factory=uuid.uuid4, primary_key=True)
@@ -122,7 +123,9 @@ class Application(BaseTableModel, table=True):
     appsflyer_pull_api_key: typing.Optional[str] = None
     appsflyer_dev_key: typing.Optional[str] = None
     adjust_app_token: typing.Optional[str] = None
-    convertion_event_names: list[str] = []
+    convertion_event_names: ARRAY(String) = sqlmodel.Field(
+        default=[], description="Application convertion event names"
+    )
 
     pull_api_collector_success: typing.Optional[bool] = None
     pull_api_collector_last_start_dt: typing.Optional[datetime.datetime] = None

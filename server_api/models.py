@@ -514,8 +514,7 @@ class Promocode(BaseTableModel, table=True):
 
 
 class PullApiLoadLog(BaseTableModel, table=True):
-    application_id: str
+    application_id: uuid.UUID = sqlmodel.Field(foreign_key="application.id")
     start_dt: datetime.datetime
     end_dt: datetime.datetime
     n_rows_loaded: int = sqlmodel.Field(default=None, nullable=True)
-    account_id: uuid.UUID = sqlmodel.Field(default=None, nullable=True)

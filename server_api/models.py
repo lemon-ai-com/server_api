@@ -123,8 +123,9 @@ class Application(BaseTableModel, table=True):
     appsflyer_pull_api_key: typing.Optional[str] = None
     appsflyer_dev_key: typing.Optional[str] = None
     adjust_app_token: typing.Optional[str] = None
-    convertion_event_names: ARRAY(String) = sqlmodel.Field(
-        default=[], description="Application convertion event names"
+    convertion_event_names = sqlmodel.Field(
+        default=[], description="Application convertion event names",
+        sa_column=sqlmodel.Column(ARRAY(String))
     )
 
     pull_api_collector_success: typing.Optional[bool] = None

@@ -148,7 +148,6 @@ class Application(BaseTableModel, table=True):
 
 
 class ApplicationCreate(pydantic.BaseModel):
-    account_id: uuid.UUID
     id_in_store: str = sqlmodel.Field(
         default=None, description="Application id in store (Google Play or App Store)"
     )

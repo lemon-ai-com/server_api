@@ -497,11 +497,11 @@ class PipelineUpdate(pydantic.BaseModel):
 class PipelineRead(pydantic.BaseModel):
     id: uuid.UUID
     application_id: uuid.UUID
-    data_transformer_train_success: bool = False
+    data_transformer_train_success: typing.Optional[bool] = None
     data_transformer_train_last_start_dt: typing.Optional[datetime.datetime] = None
     data_transformer_train_last_finish_dt: typing.Optional[datetime.datetime] = None
 
-    data_transformer_inference_success: bool = False
+    data_transformer_inference_success: typing.Optional[bool] = None
     data_transformer_inference_last_start_dt: typing.Optional[datetime.datetime] = None
     data_transformer_inference_last_finish_dt: typing.Optional[datetime.datetime] = None
 

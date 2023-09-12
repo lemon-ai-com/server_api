@@ -255,13 +255,10 @@ class Event(BaseTableModel, TargetBase, table=True):
     name: str
     appsflyer_event_name: typing.Optional[str] = None
     adjust_event_token: typing.Optional[str] = None
-    do_filter_for_target_value: bool = False
     target_value_from: typing.Optional[float] = None
     target_value_to: typing.Optional[float] = None
     time_limit_for_generation_hours: int = None
     is_sending_active: bool = False
-
-    set_target_as_revenue: bool = False
 
     s2s_events_sender_success: typing.Optional[bool] = None
     s2s_events_sender_last_start_dt: typing.Optional[datetime.datetime] = None
@@ -282,10 +279,6 @@ class EventCreate(TargetBase):
     adjust_event_token: typing.Optional[str] = sqlmodel.Field(
         default=None, description="Adjust Event token (if tracker is Adjust)"
     )
-    do_filter_for_target_value: bool = sqlmodel.Field(
-        default=None,
-        description="If true, filter event is sent only if satisfies target value filter",
-    )
     target_value_from: typing.Optional[int] = sqlmodel.Field(
         default=None,
         description="If do_filter_for_target_value is true, filter event is sent "
@@ -300,9 +293,6 @@ class EventCreate(TargetBase):
         default=None, description="Time limit for event generation in hours"
     )
     is_sending_active: typing.Optional[bool] = None
-    set_target_as_revenue: typing.Optional[bool] = sqlmodel.Field(
-        default=None, description="If true, target is set as revenue"
-    )
 
 
 class EventUpdate(EventCreate):
@@ -323,10 +313,6 @@ class EventRead(TargetBase):
     application_id: uuid.UUID = pydantic.Field(
         description="Internal application id present in account to send event for"
     )
-    do_filter_for_target_value: bool = pydantic.Field(
-        default=False,
-        description="If true, filter event is sent only if satisfies target value filter",
-    )
     target_value_from: typing.Optional[int] = pydantic.Field(
         default=None,
         description="If do_filter_for_target_value is true, filter event is sent only if "
@@ -342,9 +328,6 @@ class EventRead(TargetBase):
     )
     is_sending_active: bool = pydantic.Field(
         default=False, description="If true, event is sent to the tracker"
-    )
-    set_target_as_revenue: bool = pydantic.Field(
-        default=False, description="If true, target is set as revenue"
     )
 
     s2s_events_sender_success: typing.Optional[bool] = None

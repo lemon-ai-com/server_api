@@ -2,8 +2,11 @@ import datetime
 import typing
 import uuid
 from enum import Enum
+try:
+    from pydantic import BaseModel, Field
+except Exception:
+    from pydantic.v1 import BaseModel, Field # if lambda uses v2
 
-import pydantic
 from sqlalchemy import String
 import sqlmodel
 from sqlmodel import ARRAY
@@ -40,11 +43,11 @@ class Account(BaseTableModel, table=True):
     applications: list["Application"] = sqlmodel.Relationship(back_populates="account")
 
 
-class AccountUpdate(pydantic.BaseModel):
+class AccountUpdate(BaseModel):
     name: str = sqlmodel.Field(description="Account name")
 
 
-class AccountRead(pydantic.BaseModel):
+class AccountRead(BaseModel):
     id: uuid.UUID
     name: str = sqlmodel.Field(description="Account name")
     test_period_until: typing.Optional[datetime.datetime] = sqlmodel.Field(
@@ -78,7 +81,7 @@ class User(BaseTableModel, table=True):
     role: UserRoleEnum
 
 
-class UserCreate(pydantic.BaseModel):
+class UserCreate(BaseModel):
     email_address: str = sqlmodel.Field(description="User email address")
     password: str = sqlmodel.Field(description="User password")
 
@@ -87,26 +90,26 @@ class UserLogin(UserCreate):
     pass
 
 
-class UserInvite(pydantic.BaseModel):
+class UserInvite(BaseModel):
     email_address: str = sqlmodel.Field(description="User email address")
     role: UserRoleEnum = sqlmodel.Field(description="User role")
 
 
-class UserConfirm(pydantic.BaseModel):
+class UserConfirm(BaseModel):
     user_id: uuid.UUID = sqlmodel.Field(description="User internal id")
     signup_secret: str = sqlmodel.Field(description="User signup secret")
 
 
-class UserUpdateRole(pydantic.BaseModel):
+class UserUpdateRole(BaseModel):
     id: uuid.UUID = sqlmodel.Field(description="User internal id")
     role: UserRoleEnum = sqlmodel.Field(description="User role")
 
 
-class UserUpdatePassword(pydantic.BaseModel):
+class UserUpdatePassword(BaseModel):
     password: str = sqlmodel.Field(description="User password")
 
 
-class UserRead(pydantic.BaseModel):
+class UserRead(BaseModel):
     id: uuid.UUID = sqlmodel.Field(description="User internal id")
     email_address: str = sqlmodel.Field(description="User email address")
     role: UserRoleEnum = sqlmodel.Field(description="User role")
@@ -151,26 +154,26 @@ class Application(BaseTableModel, table=True):
         return 23 * 3600 if self.is_ios() else 3 * 24 * 3600
 
 
-class ApplicationCreate(pydantic.BaseModel):
-    id_in_store: str = pydantic.Field(
+class ApplicationCreate(BaseModel):
+    id_in_store: str = Field(
         default=None, description="Application id in store (Google Play or App Store)"
     )
-    tracker: MobileTrackerEnum = pydantic.Field(
+    tracker: MobileTrackerEnum = Field(
         default=None, description="Application tracker"
     )
-    appsflyer_pull_api_key: typing.Optional[str] = pydantic.Field(
+    appsflyer_pull_api_key: typing.Optional[str] = Field(
         default=None,
         description="Application AppsFlyer pull api key (used if tracker is AppsFlyer)",
     )
-    appsflyer_dev_key: typing.Optional[str] = pydantic.Field(
+    appsflyer_dev_key: typing.Optional[str] = Field(
         default=None,
         description="Application AppsFlyer dev key (used if tracker is AppsFlyer)",
     )
-    adjust_app_token: typing.Optional[str] = pydantic.Field(
+    adjust_app_token: typing.Optional[str] = Field(
         default=None,
         description="Application Adjust app token (used if tracker is Adjust)",
     )
-    convertion_event_names: list[str] = pydantic.Field(
+    convertion_event_names: list[str] = Field(
         default=[],
         description="Application convertion event names",
     )
@@ -187,28 +190,28 @@ class ApplicationUpdate(ApplicationCreate):
     push_api_integration_check_last_finish_dt: typing.Optional[datetime.datetime] = None
 
 
-class ApplicationRead(pydantic.BaseModel):
+class ApplicationRead(BaseModel):
     id: uuid.UUID
     account_id: uuid.UUID
-    id_in_store: str = pydantic.Field(
+    id_in_store: str = Field(
         description="Application id in store (Google Play or App Store)"
     )
-    name_in_store: typing.Optional[str] = pydantic.Field(
+    name_in_store: typing.Optional[str] = Field(
         default=None, description="Application name in store (Google Play or App Store)"
     )
-    logo_url: typing.Optional[str] = pydantic.Field(
+    logo_url: typing.Optional[str] = Field(
         default=None, description="Application logo url"
     )
-    tracker: MobileTrackerEnum = pydantic.Field(description="Application tracker")
-    appsflyer_pull_api_key: typing.Optional[str] = pydantic.Field(
+    tracker: MobileTrackerEnum = Field(description="Application tracker")
+    appsflyer_pull_api_key: typing.Optional[str] = Field(
         default=None,
         description="Application AppsFlyer pull api key (used if tracker is AppsFlyer)",
     )
-    appsflyer_dev_key: typing.Optional[str] = pydantic.Field(
+    appsflyer_dev_key: typing.Optional[str] = Field(
         default=None,
         description="Application AppsFlyer dev key (used if tracker is AppsFlyer)",
     )
-    convertion_event_names: list[str] = pydantic.Field(
+    convertion_event_names: list[str] = Field(
         default=[],
         description="Application convertion event names",
     )
@@ -302,31 +305,31 @@ class EventUpdate(EventCreate):
 
 
 class EventRead(TargetBase):
-    id: uuid.UUID = pydantic.Field(description="Event internal id")
-    name: str = pydantic.Field(description="Event internal name")
-    appsflyer_event_name: typing.Optional[str] = pydantic.Field(
+    id: uuid.UUID = Field(description="Event internal id")
+    name: str = Field(description="Event internal name")
+    appsflyer_event_name: typing.Optional[str] = Field(
         default=None, description="AppsFlyer Event name (if tracker is AppsFlyer)"
     )
-    adjust_event_id: typing.Optional[str] = pydantic.Field(
+    adjust_event_id: typing.Optional[str] = Field(
         default=None, description="Adjust Event token (if tracker is Adjust)"
     )
-    application_id: uuid.UUID = pydantic.Field(
+    application_id: uuid.UUID = Field(
         description="Internal application id present in account to send event for"
     )
-    target_value_from: typing.Optional[int] = pydantic.Field(
+    target_value_from: typing.Optional[int] = Field(
         default=None,
         description="If do_filter_for_target_value is true, filter event is sent only if "
         "target value is greater or equal to this value",
     )
-    target_value_to: typing.Optional[int] = pydantic.Field(
+    target_value_to: typing.Optional[int] = Field(
         default=None,
         description="If do_filter_for_target_value is true, filter event is sent only if "
         "target value is less or equal to this value",
     )
-    time_limit_for_generation_hours: typing.Optional[int] = pydantic.Field(
+    time_limit_for_generation_hours: typing.Optional[int] = Field(
         default=None, description="Time limit for event generation in hours"
     )
-    is_sending_active: bool = pydantic.Field(
+    is_sending_active: bool = Field(
         default=False, description="If true, event is sent to the tracker"
     )
 
@@ -349,7 +352,7 @@ class Metric(BaseTableModel, TargetBase, table=True):
 
 
 class MetricCreate(TargetBase):
-    name: str = pydantic.Field(default=None, description="Metric name")
+    name: str = Field(default=None, description="Metric name")
     application_id: uuid.UUID
 
 
@@ -358,9 +361,9 @@ class MetricUpdate(MetricCreate):
 
 
 class MetricRead(TargetBase):
-    id: uuid.UUID = pydantic.Field(description="Metric internal id")
+    id: uuid.UUID = Field(description="Metric internal id")
     application_id: uuid.UUID
-    name: str = pydantic.Field(description="Metric internal name")
+    name: str = Field(description="Metric internal name")
 
 
 class ModelOutputValueTypeEnum(str, Enum):
@@ -403,7 +406,7 @@ class Model(BaseTableModel, table=True):
     model_manager_predict_last_finish_dt: typing.Optional[datetime.datetime] = None
 
 
-class ModelCreate(pydantic.BaseModel):
+class ModelCreate(BaseModel):
     event_id: typing.Optional[uuid.UUID] = None
     metric_id: typing.Optional[uuid.UUID] = None
     pipeline_id: uuid.UUID
@@ -426,7 +429,7 @@ class ModelUpdate(ModelCreate):
     model_manager_predict_last_finish_dt: typing.Optional[datetime.datetime] = None
 
 
-class ModelRead(pydantic.BaseModel):
+class ModelRead(BaseModel):
     id: uuid.UUID
     event_id: typing.Optional[uuid.UUID] = None
     metric_id: typing.Optional[uuid.UUID] = None
@@ -463,11 +466,11 @@ class Pipeline(BaseTableModel, table=True):
     data_transformer_inference_last_finish_dt: typing.Optional[datetime.datetime] = None
 
 
-class PipelineCreate(pydantic.BaseModel):
+class PipelineCreate(BaseModel):
     application_id: uuid.UUID
 
 
-class PipelineUpdate(pydantic.BaseModel):
+class PipelineUpdate(BaseModel):
     data_transformer_train_success: typing.Optional[bool] = None
     data_transformer_train_last_start_dt: typing.Optional[datetime.datetime] = None
     data_transformer_train_last_finish_dt: typing.Optional[datetime.datetime] = None
@@ -477,7 +480,7 @@ class PipelineUpdate(pydantic.BaseModel):
     data_transformer_inference_last_finish_dt: typing.Optional[datetime.datetime] = None
 
 
-class PipelineRead(pydantic.BaseModel):
+class PipelineRead(BaseModel):
     id: uuid.UUID
     application_id: uuid.UUID
     data_transformer_train_success: typing.Optional[bool] = None

@@ -257,7 +257,6 @@ class Event(BaseTableModel, TargetBase, table=True):
     adjust_event_token: typing.Optional[str] = None
     target_value_from: typing.Optional[float] = None
     target_value_to: typing.Optional[float] = None
-    time_limit_for_generation_hours: int = None
     is_sending_active: bool = False
 
     s2s_events_sender_success: typing.Optional[bool] = None
@@ -281,16 +280,13 @@ class EventCreate(TargetBase):
     )
     target_value_from: typing.Optional[int] = sqlmodel.Field(
         default=None,
-        description="If do_filter_for_target_value is true, filter event is sent "
+        description="filter event is sent "
         "only if target value is greater or equal to this value",
     )
     target_value_to: typing.Optional[int] = sqlmodel.Field(
         default=None,
-        description="If do_filter_for_target_value is true, filter event is sent "
+        description="filter event is sent "
         "only if target value is less or equal to this value",
-    )
-    time_limit_for_generation_hours: int = sqlmodel.Field(
-        default=None, description="Time limit for event generation in hours"
     )
     is_sending_active: typing.Optional[bool] = None
 
@@ -315,16 +311,13 @@ class EventRead(TargetBase):
     )
     target_value_from: typing.Optional[int] = Field(
         default=None,
-        description="If do_filter_for_target_value is true, filter event is sent only if "
+        description="filter event is sent only if "
         "target value is greater or equal to this value",
     )
     target_value_to: typing.Optional[int] = Field(
         default=None,
-        description="If do_filter_for_target_value is true, filter event is sent only if "
+        description="filter event is sent only if "
         "target value is less or equal to this value",
-    )
-    time_limit_for_generation_hours: typing.Optional[int] = Field(
-        default=None, description="Time limit for event generation in hours"
     )
     is_sending_active: bool = Field(
         default=False, description="If true, event is sent to the tracker"

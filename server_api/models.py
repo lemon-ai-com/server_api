@@ -11,6 +11,7 @@ from sqlalchemy import String
 import sqlmodel
 from sqlmodel import ARRAY
 
+
 class BaseTableModel(sqlmodel.SQLModel):
     id: uuid.UUID = sqlmodel.Field(default_factory=uuid.uuid4, primary_key=True)
     created_at: datetime.datetime = sqlmodel.Field(

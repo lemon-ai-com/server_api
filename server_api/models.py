@@ -2,10 +2,7 @@ import datetime
 import typing
 import uuid
 from enum import Enum
-try:
-    from pydantic import BaseModel, Field
-except Exception:
-    from pydantic.v1 import BaseModel, Field # if lambda uses v2
+from pydantic import BaseModel, Field
 
 from sqlalchemy import String
 import sqlmodel

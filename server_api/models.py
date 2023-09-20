@@ -387,6 +387,7 @@ class Model(BaseTableModel, table=True):
     f1_score: typing.Optional[float] = None
     recall_score: typing.Optional[float] = None
     precision_score: typing.Optional[float] = None
+    threshold_for_max_recall: typing.Optional[float] = None
 
     model_manager_fit_success: typing.Optional[bool] = None
     model_manager_fit_last_start_dt: typing.Optional[datetime.datetime] = None
@@ -432,6 +433,7 @@ class ModelRead(BaseModel):
     f1_score: typing.Optional[float] = None
     recall_score: typing.Optional[float] = None
     precision_score: typing.Optional[float] = None
+    threshold_for_max_recall: typing.Optional[float] = None
 
     model_manager_fit_success: typing.Optional[bool] = None
     model_manager_fit_last_start_dt: typing.Optional[datetime.datetime] = None

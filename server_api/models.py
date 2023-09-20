@@ -209,6 +209,10 @@ class ApplicationRead(BaseModel):
         default=None,
         description="Application AppsFlyer dev key (used if tracker is AppsFlyer)",
     )
+    adjust_app_token: typing.Optional[str] = Field(
+        default=None,
+        description="Application Adjust app token (used if tracker is Adjust)",
+    )
     convertion_event_names: list[str] = Field(
         default=[],
         description="Application convertion event names",
@@ -304,7 +308,7 @@ class EventRead(TargetBase):
     appsflyer_event_name: typing.Optional[str] = Field(
         default=None, description="AppsFlyer Event name (if tracker is AppsFlyer)"
     )
-    adjust_event_id: typing.Optional[str] = Field(
+    adjust_event_token: typing.Optional[str] = Field(
         default=None, description="Adjust Event token (if tracker is Adjust)"
     )
     application_id: uuid.UUID = Field(

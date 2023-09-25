@@ -283,12 +283,12 @@ class EventCreate(TargetBase):
     adjust_event_token: typing.Optional[str] = sqlmodel.Field(
         default=None, description="Adjust Event token (if tracker is Adjust)"
     )
-    target_value_from: typing.Optional[int] = sqlmodel.Field(
+    target_value_from: typing.Optional[float] = sqlmodel.Field(
         default=None,
         description="filter event is sent "
         "only if target value is greater or equal to this value",
     )
-    target_value_to: typing.Optional[int] = sqlmodel.Field(
+    target_value_to: typing.Optional[float] = sqlmodel.Field(
         default=None,
         description="filter event is sent "
         "only if target value is less or equal to this value",
@@ -314,12 +314,12 @@ class EventRead(TargetBase):
     application_id: uuid.UUID = Field(
         description="Internal application id present in account to send event for"
     )
-    target_value_from: typing.Optional[int] = Field(
+    target_value_from: typing.Optional[float] = Field(
         default=None,
         description="filter event is sent only if "
         "target value is greater or equal to this value",
     )
-    target_value_to: typing.Optional[int] = Field(
+    target_value_to: typing.Optional[float] = Field(
         default=None,
         description="filter event is sent only if "
         "target value is less or equal to this value",
